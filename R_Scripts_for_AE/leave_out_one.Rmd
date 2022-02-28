@@ -1,0 +1,21 @@
+```{r}
+library(scoringRules)
+library(lubridate)
+library(crch)
+
+```
+
+
+compute_loo <- function(Y, X){ # Dimensions, inverse
+    n <- nrow(X)
+    k <- ncol(X)
+    XXi <- solve(t(X) %*% X)
+    # Usual OLS estimator
+    b <- XXi %*% t(X) %*% Y
+    # LOO residuals (n*1 vector) h <- rowSums(X*(X %*% XXi)) et <- (Y - X %*% b)/(1-h)
+    # LOO estimators (k*n matrix)
+    Xet <- X * (et %*% matrix(1, 1, k))
+    bm1 <- matrix(b, nrow = k, ncol = n) - XXi %*% t(Xet)
+    list(b, bm1)
+    }
+
